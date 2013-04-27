@@ -1,0 +1,15 @@
+@{
+    Layout = null;
+}
+TwitterUpdates
+<h3>Are you sure you want to delete this Twitter Update record?</h3>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    if (Request.UrlReferrer != null)
+    {
+        @Html.Hidden("returnUrl", Request.UrlReferrer.PathAndQuery)
+    }
+    <button type="submit">Yes, delete</button>
+}
+

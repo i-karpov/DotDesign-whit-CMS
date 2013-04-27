@@ -1,0 +1,111 @@
+@using System.Globalization
+@using DotDesign.WebUI.Areas.Cms.Models
+@using DotDesign.WebUI.Extensions
+@using PagedList.Mvc
+@model PagedList.IPagedList<DotDesign.Domain.Entities.TwitterUpdate>
+
+@{
+    ViewBag.Title = "Twitter Updates";
+    Layout = "~/Areas/Cms/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section HeadStyles
+{
+    @Styles.Render("~/LayoutStyles/Stylesheets/modal.css")
+}
+
+@Html.Partial("_CmsMenu", MenuItem.TwitterUpdates)
+
+<div class="span12 container">
+    
+    <p>
+        @Html.ActionLink("Add twitter update", "Create")
+    </p>
+
+    <table class="table table-hover">
+        <tr>
+            <th>
+                Id
+            </th>
+            <th>
+                Text
+            </th>
+            <th>
+                Is Public
+            </th>
+            <th>
+                Creation Date
+            </th>
+            <th>
+            </th>
+        </tr>
+
+        @foreach (var twitterUpdate in Model)
+        {
+            <tr>
+                <td>
+                    @twitterUpdate.Id
+                </td>
+                <td>
+                    @twitterUpdate.Text.Shorten(30)
+                </td>
+                <td>
+                    @twitterUpdate.IsPublic
+                </td>
+                <td>
+                    @Html.DisplayFor(x => twitterUpdate.CreateDate)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = twitterUpdate.Id })
+                    @Html.ActionLink("Details", "Details", new { id = twitterUpdate.Id })
+                    @Html.ActionLink("Delete", "Delete",
+                        new RouteValueDictionary(new
+                                                     {
+                                                         id = twitterUpdate.Id
+                                                     }),
+                        new Dictionary<String, Object>
+                            {
+                                {"class", "delete"},
+                                {"data-id", twitterUpdate.Id.ToString(CultureInfo.InvariantCulture)}
+                            })
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+
+
+@Html.PagedListPager(Model, pageNumber => Url.Action("AllTwitterUpdates", new { pageNumber }),
+                     new PagedListRenderOptions
+                         {
+                             ContainerDivClasses = new[]
+                                                       {
+                                                           "pagination",
+                                                           "pagination-centered"
+                                                       },
+                             DisplayLinkToFirstPage = true,
+                             DisplayLinkToLastPage = true
+                         })
+
+
+<div class="modal-background modal-part"></div>
+<div class="modal-dialog modal-part" id="modal-delete"></div>
+
+<script>
+    $(document).ready(function () {
+        $('div.modal-background').click(function (e) {
+            $('div#modal-delete').empty();
+            $('div.modal-part').hide();
+        });
+        $('a.delete').click(function (e) {
+            $('div.modal-part').show();
+            $('div#modal-delete').load('/Admin/TwitterUpdates/Delete?' +
+                $.param({
+                    id: $(this).data('id')
+                }));
+            e.preventDefault();
+            return false;
+        });
+    });
+</script>

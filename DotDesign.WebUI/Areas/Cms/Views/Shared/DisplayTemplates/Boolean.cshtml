@@ -1,0 +1,15 @@
+﻿@model Boolean?
+
+@if (!Model.HasValue) {
+   <i>N/D</i>
+}
+else {
+   if (Model.Value)
+   {
+       <text>Yes</text>
+   }
+   else
+   {
+       <text>No</text>
+   }
+}

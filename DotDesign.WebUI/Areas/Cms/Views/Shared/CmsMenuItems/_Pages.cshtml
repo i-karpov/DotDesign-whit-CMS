@@ -1,0 +1,17 @@
+﻿@using DotDesign.WebUI.Areas.Cms.Models
+@using DotDesign.WebUI.Utility
+@model MenuItem
+
+@{
+    String itemClass = Model == MenuItem.Pages ?
+        "active" :
+        default(String);
+}
+
+<li class="@itemClass">@Html.ActionLink("Pages",
+                                        "AllPages",
+                                        new
+                                            {
+                                                controller = "Pages",
+                                                pageNumber = PagingSettings.FirstPageNumber
+                                            })</li>

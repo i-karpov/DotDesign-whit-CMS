@@ -1,0 +1,42 @@
+@using DotDesign.WebUI.Areas.Cms.Models
+@using DotDesign.WebUI.Extensions
+@using DotDesign.WebUI.Utility
+@model DotDesign.Domain.Entities.TwitterUpdate
+
+@{
+    ViewBag.Title = "Twitter Updates";
+    Layout = "~/Areas/Cms/Views/Shared/_AdminLayout.cshtml";
+}
+
+@Html.Partial("_CmsMenu", MenuItem.TwitterUpdates)
+
+<fieldset>
+    <legend>TwitterUpdate</legend>
+
+    @Html.LabelFor(model => model.Text)
+    @Model.Text.Shorten(30)
+    
+    @Html.LabelFor(model => model.IsPublic)
+    @Model.IsPublic
+
+    @Html.LabelFor(model => model.CreateDate)
+    @Model.CreateDate
+</fieldset>
+<p>
+    @if (Request.UrlReferrer != null &&
+            Url.IsLocalUrl(Request.UrlReferrer.PathAndQuery))
+        {
+            <a href="@Request.UrlReferrer.PathAndQuery">Back to list</a>
+        }
+    else
+    {
+        @Html.ActionLink("Back to list",
+            "AllTwitterUpdates",
+            new
+                {
+                    pageNumber = PagingSettings.FirstPageNumber
+                })
+    }
+</p>
+
+

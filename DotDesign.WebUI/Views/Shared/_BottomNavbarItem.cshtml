@@ -1,0 +1,26 @@
+﻿@using DotDesign.WebUI.Utility
+@model DotDesign.WebUI.ViewModels.BottomNavbarItemModel
+
+@{
+    String htmlClass = null;
+    if (!String.IsNullOrEmpty(Model.CurrentCategoryUrl))
+    {
+        if (Model.CurrentCategoryUrl.ToLower() ==
+                Model.Category.Url.ToLower())
+        {
+            htmlClass = "active";
+        }
+    }
+    @Html.ActionLink(Model.Category.Name.ToUpper(),
+                     "Category",
+                     "Home",
+                     new
+                         {
+                             categoryUrl = Model.Category.Url ,
+                             pageNumber = PagingSettings.FirstPageNumber
+                         },
+                     new
+                         {
+                             @class = htmlClass
+                         })
+}

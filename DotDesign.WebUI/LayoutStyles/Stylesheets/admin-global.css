@@ -1,0 +1,99 @@
+﻿body {
+    padding-top: 60px;
+}
+
+.image-preview-large {
+    max-width: 150px;
+    height:auto;
+}
+
+.image-preview-small {
+    max-width: 50px;
+    height:auto;
+}
+
+div.details-contents {
+    width: 940px;
+    word-wrap: break-word;
+    color: #727272;
+}
+
+form.make-home {
+    display: inline;
+}
+
+form.make-home button {
+    padding: 0;
+    margin-top: -3px;
+}
+
+table th {
+    background-color: #eeeeee !important;
+}
+
+input[type=text],[type=email] {
+    width: 400px !important;
+}
+
+textarea {
+    height: 200px !important;
+    width: 400px !important;
+    word-wrap: normal !important;
+    resize: none !important;
+}
+
+div.image-set {
+    margin-bottom: 30px;
+    overflow: auto;
+}
+
+div.invisible {
+    display: none;
+}
+
+div.spacer {
+    height: 10px;
+}
+
+div.double-spacer {
+    height: 20px;
+}
+
+div.triple-spacer {
+    height: 30px;
+}
+
+div.main-contents {
+    margin-top: 20px;
+}
+
+pre {
+    font: inherit !important;
+    height: 200px !important;
+    width: 400px !important;
+    word-wrap: normal !important;
+    word-break: normal !important;
+    overflow: auto !important;
+}
+
+.translucent {
+    opacity: 0.5;
+}
+
+.controls-container {
+    overflow:auto; 
+}
+
+.thin-border {
+    border: 1px solid #737373;
+}
+
+.fileupload .thumbnail {
+    max-width: 400px;
+    max-height: 1000px;
+}
+
+.field-validation-error {
+    color: rgb(255, 51, 51);
+    margin-left: 10px;
+}

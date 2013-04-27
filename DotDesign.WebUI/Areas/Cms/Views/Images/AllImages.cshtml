@@ -1,0 +1,117 @@
+﻿@using System.Globalization
+@using DotDesign.WebUI.Areas.Cms.Models
+@using DotDesign.WebUI.Extensions
+@using PagedList
+@using PagedList.Mvc
+@model IPagedList<DotDesign.Domain.Entities.Image>
+
+@{
+    ViewBag.Title = "Images";
+    Layout = "~/Areas/Cms/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section HeadStyles
+{
+    @Styles.Render("~/LayoutStyles/Stylesheets/modal.css")
+}
+
+
+@Html.Partial("_CmsMenu", MenuItem.Images)
+
+    <table class="table table-hover table-striped table-bordered">
+        <tr>
+            <th>
+                Id
+            </th>
+            <th>
+                Preview
+            </th>
+            <th>
+                Url
+            </th>
+            <th>
+                Creation date
+            </th>
+            <th>
+            </th>
+        </tr>
+
+        @foreach (var image in Model)
+        {
+            <tr>
+                <td>
+                    <strong>@image.Id</strong>
+                </td>
+                <td class="image-preview-large">
+                    @Html.Image(image.Url.ToFullRelativeResourceUrl())
+                </td>
+                <td>
+                    <a href="@image.Url.ToFullRelativeResourceUrl()"
+                       title="@image.Url.ToFullRelativeResourceUrl()"
+                       target="_blank">
+                        @image.Url.ToFullRelativeResourceUrl().Shorten(60)
+                    </a>
+                </td>
+                <td>
+                    @Html.DisplayFor(x => image.CreateDate)
+                </td>
+                <td>
+                    <div class="pull-right">
+                        @Html.ActionLink(" ",
+                                            "Delete",
+                                            new RouteValueDictionary(new
+                                                                        {
+                                                                            id = image.Id
+                                                                        }),
+                                            new Dictionary<String, Object>
+                                                {
+                                                    {
+                                                        "class",
+                                                        "delete icon-remove"
+                                                    },
+                                                    {
+                                                        "data-id",
+                                                        image.Id.ToString(CultureInfo.InvariantCulture)
+                                                    },
+                                                    {
+                                                        "title",
+                                                        "Delete"
+                                                    }
+                                                })
+                    </div>
+                </td>
+            </tr>
+        }
+
+    </table>
+    
+
+@Html.ActionLink("Upload image",
+    "Upload",
+    null,
+    new
+        {
+            @class = "btn btn-primary pull-right"
+        })
+
+@Html.PagedListPager(Model, pageNumber => Url.Action("AllImages", new { pageNumber }),
+                     new PagedListRenderOptions
+                         {
+                             ContainerDivClasses = new[]
+                                                       {
+                                                           "pagination",
+                                                           "pagination-centered"
+                                                       },
+                             DisplayLinkToFirstPage = true,
+                             DisplayLinkToLastPage = true
+                         })
+
+<div class="modal-background modal-part"></div>
+<div class="modal-dialog modal-part" id="modal-delete"></div>
+
+@section BottomScripts
+{
+    <script>
+        $(document).ready(setModalDelete('/Admin/Images/Delete'));
+    </script>
+}

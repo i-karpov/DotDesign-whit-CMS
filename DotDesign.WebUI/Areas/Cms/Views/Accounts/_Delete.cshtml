@@ -1,0 +1,15 @@
+@using DotDesign.WebUI.Extensions
+@model DotDesign.Domain.Entities.Admin
+
+@{
+    Layout = null;
+}
+
+<div class="modal-center">
+    <h4>@Model.Username.Shorten(30)<span>, are you sure you want to delete your own account?</span></h4>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <button class="btn pull-right btn-danger" type="submit">Yes, delete</button>
+    }
+</div>

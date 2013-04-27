@@ -1,0 +1,35 @@
+﻿@model DotDesign.WebUI.Areas.Cms.ViewModels.AccountModel
+
+@{
+    ViewBag.Title = "_CreateOrEdit";
+}
+
+<div class="control-group">
+    <label><strong>First name</strong></label>
+    @Html.EditorFor(model => model.ProfileModel.FirstName)
+    @Html.ValidationMessageFor(model => model.ProfileModel.FirstName)
+</div>
+        
+<div class="control-group">
+    <label><strong>Last name</strong></label>
+    @Html.EditorFor(model => model.ProfileModel.LastName)
+    @Html.ValidationMessageFor(model => model.ProfileModel.LastName)
+</div>
+        
+<div class="control-group">
+    <label><strong>Phone number</strong></label>
+    @Html.EditorFor(model => model.ProfileModel.PhoneNumber)
+    @Html.ValidationMessageFor(model => model.ProfileModel.PhoneNumber)
+</div>
+        
+<div class="control-group">
+    <label><strong>Email</strong></label>
+    @Html.EditorFor(model => model.ProfileModel.Email)
+    @Html.ValidationMessageFor(model => model.ProfileModel.Email)
+</div>
+        
+<div class="control-group">
+    <label><strong>Description</strong></label>
+    @Html.EditorFor(model => model.ProfileModel.Description)
+    @Html.ValidationMessageFor(model => model.ProfileModel.Description)
+</div>

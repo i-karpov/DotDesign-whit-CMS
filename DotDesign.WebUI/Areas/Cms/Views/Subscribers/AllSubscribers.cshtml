@@ -1,0 +1,116 @@
+@using System.Globalization
+@using DotDesign.WebUI.Areas.Cms.Models
+@using DotDesign.WebUI.Extensions
+@using PagedList.Mvc
+@model PagedList.IPagedList<DotDesign.Domain.Entities.Subscriber>
+
+@{
+    ViewBag.Title = "Subscribers";
+    Layout = "~/Areas/Cms/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section HeadStyles
+{
+    @Styles.Render("~/LayoutStyles/Stylesheets/modal.css")
+}
+
+@Html.Partial("_CmsMenu", MenuItem.Subscribers)
+
+<table class="table table-hover table-striped table-bordered">
+    <tr>
+        <th>
+            Id
+        </th>
+        <th>
+            Name
+        </th>
+        <th>
+            Email
+        </th>
+        <th>
+            Creation date
+        </th>
+        <th>
+        </th>
+    </tr>
+
+    @foreach (var subscriber in Model)
+    {
+        <tr>
+            <td>
+                <strong>@subscriber.Id</strong>
+            </td>
+            <td>
+                @subscriber.Name.Shorten(30)
+            </td>
+            <td>
+                <a href="mailto:subscriber.Email">@subscriber.Email</a>
+            </td>
+            <td>
+                @Html.DisplayFor(x => subscriber.CreateDate)
+            </td>
+            <td>
+                <div class="pull-right">
+                    @Html.ActionLink(" ",
+                        "Delete",
+                        new RouteValueDictionary(new
+                                                    {
+                                                        id = subscriber.Id
+                                                    }),
+                        new Dictionary<String, Object>
+                            {
+                                {
+                                    "class",
+                                    "delete icon-remove"
+                                },
+                                {
+                                    "data-id",
+                                    subscriber.Id.ToString(CultureInfo.InvariantCulture)
+                                },
+                                {
+                                    "title",
+                                    "delete"
+                                }
+                            })
+                </div>
+            </td>
+        </tr>
+    }
+
+</table>
+
+@Html.ActionLink("Add subscriber",
+    "Create",
+    null,
+    new
+        {
+            @class = "btn btn-primary pull-right"
+        })
+
+@Html.PagedListPager(Model,
+                     pageNumber => Url.Action("AllSubscribers",
+                                              new
+                                                  {
+                                                      pageNumber
+                                                  }),
+                     new PagedListRenderOptions
+                         {
+                             ContainerDivClasses = new[]
+                                                       {
+                                                           "pagination",
+                                                           "pagination-centered"
+                                                       },
+                             DisplayLinkToFirstPage = true,
+                             DisplayLinkToLastPage = true
+                         })
+
+
+<div class="modal-background modal-part"></div>
+<div class="modal-dialog modal-part" id="modal-delete"></div>
+
+@section BottomScripts
+{
+    <script>
+        $(document).ready(setModalDelete('/Admin/Subscribers/Delete'));
+    </script>
+}

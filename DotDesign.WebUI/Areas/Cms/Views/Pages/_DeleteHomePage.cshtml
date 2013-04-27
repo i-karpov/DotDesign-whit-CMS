@@ -1,0 +1,11 @@
+@{
+    Layout = null;
+}
+
+<div class="modal-center">
+    <h4><span>Are you sure you want to delete your </span>home page<span>?</span></h4>
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+        <button class="btn pull-right btn-danger" type="submit">Yes, delete</button>
+    }
+</div>

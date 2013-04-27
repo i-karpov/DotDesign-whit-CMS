@@ -1,0 +1,30 @@
+﻿@using DotDesign.WebUI.Extensions
+@using DotDesign.WebUI.ViewModels
+@model IEnumerable<BriefReview>
+
+@foreach (BriefReview briefReview in Model)
+{
+    <div class="prefix_1 grid_10 suffix_1">
+        <div class="content-overview">
+            <header>
+                <p>
+                    @Html.PageLink(briefReview.Title.Shorten(60),
+                           briefReview.Title,
+                           briefReview.CategoryUrl,
+                           briefReview.Url)
+                </p>
+            </header>
+            <p>
+                @briefReview.Description.Shorten(800)
+            </p>
+            <div class="controls">
+                @Html.PageLink("More...",
+                               briefReview.Title,
+                               briefReview.CategoryUrl,
+                               briefReview.Url)
+            </div>
+        </div>
+    </div>
+    <div class="clear">
+    </div>
+}

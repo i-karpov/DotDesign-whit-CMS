@@ -1,0 +1,14 @@
+﻿@using DotDesign.WebUI.Areas.Cms.Models
+@model MenuItem
+
+@{
+    Layout = null;
+}
+
+<ul class="nav nav-tabs">
+    @foreach(MenuItem menuItem in Enum.GetValues(typeof(MenuItem)))
+    {
+        @Html.Partial(String.Format("CmsMenuItems/_{0}", menuItem.ToString()), Model)
+    }
+</ul>
+

@@ -1,0 +1,30 @@
+@using DotDesign.WebUI.Extensions
+@model DotDesign.WebUI.Areas.Cms.ViewModels.AccountModel
+
+@{
+    ViewBag.Title = "Editing account";
+    Layout = "~/Areas/Cms/Views/Shared/_AdminLayout.cshtml";
+}
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    <fieldset>
+        <legend>
+            <small>Editing account:</small>
+            &nbsp;&nbsp;@Model.Username.Shorten(30)
+        </legend>
+
+        @Html.Partial("_CreateOrEdit")
+        
+        <div class="pull-right">
+            @Html.ActionLink("Back to details",
+                "Details",
+                null,
+                new
+                    {
+                        @class = "btn"
+                    })
+            <button type="submit" class="btn btn-primary">Update</button>
+        </div>
+    </fieldset>
+}

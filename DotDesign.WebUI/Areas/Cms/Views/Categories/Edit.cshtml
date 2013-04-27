@@ -1,0 +1,63 @@
+@using DotDesign.WebUI.Areas.Cms.Models
+@using DotDesign.WebUI.Extensions
+@using DotDesign.WebUI.Utility
+@model DotDesign.WebUI.Areas.Cms.ViewModels.CategoryModel
+
+@{
+    ViewBag.Title = "Editing category";
+    Layout = "~/Areas/Cms/Views/Shared/_AdminLayout.cshtml";
+}
+
+@Html.Partial("_CmsMenu", MenuItem.Categories)
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    if (Request.UrlReferrer != null)
+    {
+        @Html.Hidden("returnUrl", Request.UrlReferrer.PathAndQuery)
+    }
+    <fieldset>
+        <legend>Editing category</legend>
+        
+        @Html.HiddenFor(model => model.Id)
+        
+        <label>
+            <strong>Url:</strong>
+            @{
+                String url = Model.Url.Shorten(30);
+            }
+            @Html.DisplayFor(x => url)
+        </label>
+        <div class="spacer">
+        </div>
+
+        @Html.Partial("_CreateOrEdit", Model)
+
+        <div class="pull-right">
+                @if (Request.UrlReferrer != null &&
+                    Url.IsLocalUrl(Request.UrlReferrer.PathAndQuery))
+                {
+                    <a class="btn"
+                       href="@Request.UrlReferrer.PathAndQuery">
+                        Back to list
+                    </a>
+                }
+                else
+                {
+                    @Html.ActionLink("Back to list",
+                        "AllCategories",
+                        new
+                            {
+                                pageNumber = PagingSettings.FirstPageNumber
+                            },
+                        new
+                            {
+                                @class = "btn"
+                            })
+                }
+            
+            <button type="submit" class="btn btn-primary">Update</button>
+        </div>
+    </fieldset>
+}
+

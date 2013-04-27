@@ -1,0 +1,47 @@
+﻿@using Itransition.DotDesign.Domain.Entities
+@model Component
+
+@{
+    IEnumerator<Image> imageEnumerator = Model.Images.GetEnumerator();
+    IEnumerator<TextPart> textEnumerator = Model.TextParts.GetEnumerator();
+    
+    while (imageEnumerator.MoveNext() && textEnumerator.MoveNext())
+    {
+        <div class="grid_12 image-gallery">
+            
+            <div class="grid_3 alpha">
+                <a href="@imageEnumerator.Current.Url" class="lightbox[gellery]" title="@textEnumerator.Current.Text">
+                        <img src="@imageEnumerator.Current.Url" alt="" /></a>
+            </div>
+            
+            <div class="grid_3">
+                @if (imageEnumerator.MoveNext() && textEnumerator.MoveNext())
+                {
+                    <a href="@imageEnumerator.Current.Url" class="lightbox[gellery]" title="@textEnumerator.Current.Text">
+                        <img src="@imageEnumerator.Current.Url" alt="" /></a>
+                }
+            </div>
+            
+            <div class="grid_3">
+                @if (imageEnumerator.MoveNext() && textEnumerator.MoveNext())
+                {
+                    <a href="@imageEnumerator.Current.Url" class="lightbox[gellery]" title="@textEnumerator.Current.Text">
+                        <img src="@imageEnumerator.Current.Url" alt="" /></a>
+                }
+            </div>
+            
+            <div class="grid_3 omega">
+                @if (imageEnumerator.MoveNext() && textEnumerator.MoveNext())
+                {
+                    <a href="@imageEnumerator.Current.Url" class="lightbox[gellery]" title="@textEnumerator.Current.Text">
+                        <img src="@imageEnumerator.Current.Url" alt="" /></a>
+                }
+            </div>
+
+        </div>
+    }
+}
+
+    
+    
+

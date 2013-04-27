@@ -1,0 +1,39 @@
+﻿@using DotDesign.WebUI.Areas.Cms.Models
+@using DotDesign.WebUI.Utility
+@{
+    ViewBag.Title = "Home Page";
+    Layout = "~/Areas/Cms/Views/Shared/_AdminLayout.cshtml";
+}
+
+@Html.Partial("_CmsMenu", MenuItem.HomePage)
+
+<div class="double-spacer"></div>
+
+<h4>Home page doesn't exist yet, would you like to create it now?</h4><h5>Or you can also appoint some existing page.</h5>
+
+<div class="double-spacer"></div>
+<div class="double-spacer"></div>
+
+<div class="controls-container">
+    <div class="pull-right">
+        @Html.ActionLink("View existing pages",
+                         "AllPages",
+                         new
+                             {
+                                 pageNumber = PagingSettings.FirstPageNumber
+                             },
+                         new
+                             {
+                                 @class = "btn"
+                             })
+        @Html.ActionLink("Create new",
+                         "CreateHomePage",
+                         null,
+                         new
+                             {
+                                 @class = "btn btn-primary"
+                             })
+    </div>
+</div>
+
+<div class="double-spacer"></div>

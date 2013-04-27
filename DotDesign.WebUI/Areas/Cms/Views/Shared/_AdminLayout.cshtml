@@ -1,0 +1,73 @@
+﻿@using DotDesign.WebUI.Utility
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>DotDesign CMS: @ViewBag.Title</title>
+    @Styles.Render("~/LayoutStyles/Stylesheets/admin-global.css")
+    @Styles.Render("~/LayoutStyles/Stylesheets/fonts.css")
+    @Styles.Render("~/LayoutStyles/Stylesheets/bootstrap.css")
+    @RenderSection("HeadStyles", false)
+
+    @Scripts.Render("http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js")
+    @Scripts.Render("~/Scripts/CmsScripts.js")
+</head>
+<body>
+    <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                @Html.ActionLink("DotDesign CMS", "AllPages", "Pages",
+                                    new
+                                        {
+                                            pageNumber = PagingSettings.FirstPageNumber
+                                        },
+                                    new
+                                        {
+                                            @class = "brand"
+                                        })
+                <ul class="nav pull-right">
+                    <li class="dropdown">
+                        <div class="btn-group">
+                            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="icon-user"></i>
+                                @User.Identity.Name
+                                <span class="caret"></span>
+                            </a>
+                            <ul id="menu1" class="dropdown-menu pull-right">
+                                <li>@Html.ActionLink("Manage Content", "AllPages",
+                                                        new
+                                                            {
+                                                                    controller = "Pages",
+                                                                    pageNumber = PagingSettings.FirstPageNumber
+                                                            })</li>
+                                <li class="divider"></li>
+                                <li>@Html.ActionLink("Manage Accounts", "AllAccounts",
+                                                     new
+                                                         {
+                                                             controller = "Accounts",
+                                                             pageNumber = PagingSettings.FirstPageNumber
+                                                         })</li>
+                                <li>@Html.ActionLink("My Profile", "Details", "Accounts")</li>
+                                <li class="divider"></li>
+                                <li>
+                                    @Html.ActionLink("Log Off", "LogOff", "Accounts")
+                                </li>
+                            </ul>
+                        </div>
+                    </li>                        
+
+                </ul>
+            </div>
+        </div>
+    </div> 
+    
+    <div class="container">
+        @RenderBody()   
+    </div>
+    
+    @Scripts.Render("~/Scripts/bootstrap.min.js")
+    @RenderSection("BottomScripts", false)
+</body>
+</html>

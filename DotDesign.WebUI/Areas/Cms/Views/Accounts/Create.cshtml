@@ -1,0 +1,58 @@
+@using DotDesign.WebUI.Utility
+@model DotDesign.WebUI.Areas.Cms.ViewModels.AccountModel
+
+@{
+    ViewBag.Title = "Creating account";
+    Layout = "~/Areas/Cms/Views/Shared/_AdminLayout.cshtml";
+}
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    <fieldset>
+        <legend>Creating new account</legend>
+
+        <div class="control-group">
+            <label><strong>Username</strong></label>
+            @Html.EditorFor(model => model.Username)
+            @Html.ValidationMessageFor(model => model.Username)
+        </div>
+        
+        <div class="control-group">
+            <label><strong>New password</strong></label>
+            @Html.EditorFor(model => model.NewPassword)
+            @Html.ValidationMessageFor(model => model.NewPassword)
+        </div>
+        
+        <div class="control-group">
+            <label><strong>New password confirmation</strong></label>
+            @Html.EditorFor(model => model.NewPasswordConfirmation)
+            @Html.ValidationMessageFor(model => model.NewPasswordConfirmation)
+        </div>
+        
+        <div class="triple-spacer"></div>
+
+        @Html.Partial("_CreateOrEdit")
+
+        <div class="pull-right">
+            @if (Request.UrlReferrer != null &&
+                 Url.IsLocalUrl(Request.UrlReferrer.PathAndQuery))
+             {
+                 <a class="btn" href="@Request.UrlReferrer.PathAndQuery">Back to list</a>
+             }
+             else
+             {
+                @Html.ActionLink("Back to list",
+                             "AllAccounts",
+                             new
+                                 {
+                                     pageNumber = PagingSettings.FirstPageNumber
+                                 },
+                             new
+                                 {
+                                     @class = "btn"
+                                 })
+             }
+            <button type="submit" class="btn btn-primary">Add</button>
+        </div>
+    </fieldset>
+}

@@ -1,0 +1,73 @@
+﻿@model DotDesign.WebUI.Areas.Cms.ViewModels.LoginModel
+
+@{
+    Layout = null;
+    ViewBag.Title = "Log in";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/LayoutStyles/Stylesheets/bootstrap.css")
+    @Styles.Render("~/LayoutStyles/Stylesheets/login-page.css")
+</head>
+    <body>
+        @{
+            String extraHtmlClass = null;
+            if (!ViewData.ModelState.IsValid)
+            {
+                extraHtmlClass = "failed";
+            }
+        }
+        @using (Html.BeginForm("Login",
+                               "Accounts",
+                               new { ViewBag.ReturnUrl },
+                               FormMethod.Post,
+                               new { @class = "login-form " + extraHtmlClass}))
+        {
+            @Html.AntiForgeryToken()
+
+            <h2 class="heading">Please log in</h2>
+
+            @Html.TextBoxFor(m => m.Username, new { @class = "username input-block-level", Value="Username" })
+            @Html.ValidationMessageFor(m => m.Username)
+
+            <div class="password-hint">
+                <input class="input-block-level" type="text" value="Password" name="__nothing">
+            </div>
+            <div class="password">
+                @Html.PasswordFor(m => m.Password, new { @class = "input-block-level" })
+            </div>
+            @Html.ValidationMessageFor(m => m.Password)
+       
+            <button class="btn btn-primary" type="submit">Log in</button>
+        }
+    
+        @Scripts.Render("http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js")
+        @Scripts.Render("~/Scripts/input-placeholder.js")
+        <script>
+            $(document).ready(function() {
+                $("form.login-form input.username").setInputPlaceholder("Username");
+
+                var $passwordField = $("form.login-form div.password");
+                var $passwordHint = $("form.login-form div.password-hint");
+                $passwordHint.children().focus(function () {
+                    $passwordHint.hide();
+                    $passwordField.show();
+                    $passwordField.children().focus();
+                });
+                $passwordField.children().blur(function () {
+                    if ($passwordField.children().val() === "") {
+                        $passwordField.hide();
+                        $passwordHint.show();
+
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>

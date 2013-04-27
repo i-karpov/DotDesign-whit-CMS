@@ -1,0 +1,19 @@
+﻿@using DotDesign.WebUI.Extensions
+@model DotDesign.Domain.Entities.Image
+
+@{
+    Layout = null;
+}
+
+<div class="modal-center">
+    <h4><span>Are you sure you want to delete image "</span>@Model.Url.Shorten(30)<span>"?</span></h4>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        if (Request.UrlReferrer != null)
+        {
+            @Html.Hidden("returnUrl", Request.UrlReferrer.PathAndQuery)
+        }
+        <button class="btn pull-right btn-danger" type="submit">Yes, delete</button>
+    }
+</div>

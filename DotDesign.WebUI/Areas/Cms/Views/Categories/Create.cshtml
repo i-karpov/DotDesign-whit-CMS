@@ -1,0 +1,52 @@
+@using DotDesign.WebUI.Areas.Cms.Models
+@using DotDesign.WebUI.Utility
+@model DotDesign.WebUI.Areas.Cms.ViewModels.CategoryModel
+
+@{
+    ViewBag.Title = "Creating category";
+    Layout = "~/Areas/Cms/Views/Shared/_AdminLayout.cshtml";
+}
+
+@Html.Partial("_CmsMenu", MenuItem.Categories)
+
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    <fieldset>
+        <legend>Creating new category</legend>
+        
+        <div class="control-group">
+            <label><strong>Url</strong></label>
+            @Html.EditorFor(model => model.Url)
+            @Html.ValidationMessageFor(model => model.Url)
+        </div>
+
+        @Html.Partial("_CreateOrEdit", Model)
+        
+        <div class="spacer"></div>
+
+        <div class="pull-right">
+            @if (Request.UrlReferrer != null &&
+                 Url.IsLocalUrl(Request.UrlReferrer.PathAndQuery))
+             {
+                 <a class="btn" href="@Request.UrlReferrer.PathAndQuery">Back to list</a>
+             }
+             else
+             {
+                @Html.ActionLink("Back to list",
+                             "AllCategories",
+                             new
+                                 {
+                                     pageNumber = PagingSettings.FirstPageNumber
+                                 },
+                             new
+                                 {
+                                     @class = "btn"
+                                 })
+             }
+            <button type="submit" class="btn btn-primary">Add</button>
+        </div>
+    </fieldset>
+}
+
+

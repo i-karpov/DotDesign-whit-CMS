@@ -1,0 +1,277 @@
+@using DotDesign.WebUI.Extensions
+@model DotDesign.WebUI.Areas.Cms.ViewModels.PageCreateOrEditModel
+
+@{
+    Layout = null;
+}
+
+<div class="control-group">
+    <label><strong>Title</strong></label>
+    @Html.EditorFor(model => model.Title)
+    @Html.ValidationMessageFor(model => model.Title)
+</div>
+
+<div class="control-group">
+    <label><strong>Description</strong></label>
+    @Html.TextAreaFor(model => model.Description)
+    @Html.ValidationMessageFor(model => model.Description)
+</div>
+
+<div class="control-group">
+    <label><strong>Category to attach to</strong></label>
+    @Html.DropDownListFor(model => model.CategoryId, Model.AvailableCategories)
+</div>
+
+<div class="control-group">
+    <label class="checkbox">
+        @Html.EditorFor(model => model.IsPublic)
+        &nbsp;<strong>Make it public</strong>
+    </label>
+</div>
+
+<div class="control-group">
+    <label class="checkbox">
+        @Html.EditorFor(model => model.IsDisplayedInLatestPosts)
+        &nbsp;<strong>Display in "Latest Posts" section</strong>
+    </label>
+</div>
+
+<div class="spacer"></div>
+
+<div class="control-group">
+    <div class="large-slideshow-editor">
+        <label class="checkbox">
+            @Html.EditorFor(model => model.IsLargeSlideshowEnabled)
+            &nbsp;<strong>Enable large slideshow</strong>
+        </label>
+    
+        @{
+            String imageSetExtraHtmlClass = String.Empty;
+            if (!Model.IsLargeSlideshowEnabled)
+            {
+                imageSetExtraHtmlClass = " invisible";
+            }
+        }
+    
+        <div class="@("image-set" + imageSetExtraHtmlClass)">
+            <table class="table table-hover table-striped table-bordered added-images">
+                <tr>
+                    <th>
+                        Id
+                    </th>
+                    <th>
+                        Preview
+                    </th>
+                    <th>
+                        Url
+                    </th>
+                    <th>
+                    </th>
+                </tr>
+
+                @foreach (var image in Model.LargeSlideshowImages)
+                {
+                    <tr data-image-id="@image.Id">
+                        <td>
+                            @image.Id
+                        </td>
+                        <td class="image-preview-small">
+                            @Html.Image(@image.Url.ToFullRelativeResourceUrl())
+                        </td>
+                        <td>
+                            @image.Url.ToFullRelativeResourceUrl().Shorten(60)
+                        </td>
+                        <td>
+                            <a href="#" class="delete-image btn btn-small btn-danger pull-right">Delete</a>
+                        </td>
+                    </tr>
+                }
+
+            </table>
+            
+            <a href="#" class="add-image btn btn-primary btn-small pull-right">Add image</a>
+     
+            <div class="modal-background modal-part"></div>
+            <div class="modal-dialog modal-dialog-large modal-part" id="tn_select"></div>
+        </div>
+    
+    </div>
+</div>
+
+<div class="control-group">
+    <div class="small-slideshow-editor">
+        <label class="checkbox">
+            @Html.EditorFor(model => model.IsSmallSlideshowEnabled)
+            &nbsp;<strong>Enable small slideshow</strong>
+        </label>
+    
+        @{
+            imageSetExtraHtmlClass = String.Empty;
+            if (!Model.IsSmallSlideshowEnabled)
+            {
+                imageSetExtraHtmlClass = " invisible";
+            }
+        }
+
+        <div class="@("image-set" + imageSetExtraHtmlClass)">
+            <table class="table table-hover table-striped table-bordered added-images">
+                <tr>
+                    <th>
+                        Id
+                    </th>
+                    <th>
+                        Preview
+                    </th>
+                    <th>
+                        Url
+                    </th>
+                    <th>
+                    </th>
+                </tr>
+
+                @foreach (var image in Model.SmallSlideshowImages)
+                {
+                    <tr data-image-id="@image.Id">
+                        <td>
+                            @image.Id
+                        </td>
+                        <td class="image-preview-small">
+                            @Html.Image(@image.Url.ToFullRelativeResourceUrl())
+                        </td>
+                        <td>
+                            @image.Url.ToFullRelativeResourceUrl().Shorten(60)
+                        </td>
+                        <td>
+                            <a href="#" class="delete-image btn btn-small btn-danger pull-right">Delete</a>
+                        </td>
+                    </tr>
+                }
+
+            </table>
+            
+            <a href="#" class="add-image btn btn-primary btn-small pull-right">Add image</a>
+
+            <div class="modal-background modal-part"></div>
+            <div class="modal-dialog modal-dialog-large modal-part" id="tn_select"></div>
+        </div>
+    
+    </div>
+</div>
+
+<div class="control-group main-contents">
+    <label><strong>Main contents</strong></label>
+    @Html.EditorFor(model => model.ContentsMarkup)
+</div>
+
+<script>
+    $(document).ready(function() {
+        var $form = $('form');
+        $form.submit(function() {
+            var $largeSlideshowImages = $('div.large-slideshow-editor div.image-set table.added-images tr'),
+                $smallSlideshowImages = $('div.small-slideshow-editor div.image-set table.added-images tr'),
+                i,
+                count;
+            for (i = 1, count = $largeSlideshowImages.length; i < count; i += 1) {
+                $form.append("<input type='hidden' name='LargeSlideshowImages[" + (i - 1) +
+                    "].Id' value='" + $($largeSlideshowImages[i]).data('image-id') + "' >");
+            }
+            for (i = 1, count = $smallSlideshowImages.length; i < count; i += 1) {
+                $form.append("<input type='hidden' name='SmallSlideshowImages[" + (i - 1) +
+                    "].Id' value='" + $($smallSlideshowImages[i]).data('image-id') + "' >");
+            }
+        });
+
+        $('div.image-set table.added-images tr a.delete-image').each(function() {
+            $(this).click(function() {
+                $(this).parent().parent().remove();
+                e.preventDefault();
+                return false;
+            });
+        });
+
+        // large slideshow editing
+        // ---------------------------------------------------------------------------------------
+        $('div.large-slideshow-editor input#IsLargeSlideshowEnabled').change(function() {
+            if ($(this).is(':checked')) {
+                var $imageSet = $('div.large-slideshow-editor div.image-set');
+                $imageSet.removeClass('invisible');
+                $imageSet.show('fast');
+            } else {
+                $('div.large-slideshow-editor div.image-set').hide('fast');
+            }
+        });
+
+        $('div.large-slideshow-editor .modal-background').click(function(e) {
+            $('div.large-slideshow-editor #tn_select').empty();
+            $('div.large-slideshow-editor .modal-part').hide();
+        });
+
+        $('div.large-slideshow-editor a.add-image').click(function(e) {
+            $('div.large-slideshow-editor .modal-part').show();
+            $('div.large-slideshow-editor #tn_select').load('/Admin/Pages/AddImage', function() {
+                $('div.large-slideshow-editor #tn_select a.add').click(function() {
+                    var id = $(this).data('id');
+                    var url = $(this).data('url');
+                    // <tr> has image-id data to bind it properly to Image object
+                    var newImageHtml = "<tr data-image-id='" + id + "'><td>" + id +
+                        "</td><td class='image-preview-small'><img alt='' src='" + url + "'/>" + "</td><td>" +
+                        url +
+                        "</td><td><a href='#' class='delete-image btn btn-small btn-danger pull-right'>Delete</a></td></tr>";
+                    $('div.large-slideshow-editor div.image-set table.added-images').append(newImageHtml);
+                    $('div.large-slideshow-editor tr a.delete-image').last().click(function() {
+                        $(this).parent().parent().remove();
+                        e.preventDefault();
+                        return false;
+                    });
+                    e.preventDefault();
+                    return false;
+                });
+            });
+            e.preventDefault();
+            return false;
+        });
+        // --------------------------------------------------------------------------------------
+
+
+        // small slideshow editing
+        // ---------------------------------------------------------------------------------------
+        $('div.small-slideshow-editor input#IsSmallSlideshowEnabled').change(function() {
+            if ($(this).is(':checked')) {
+                var $imageSet = $('div.small-slideshow-editor div.image-set');
+                $imageSet.removeClass('invisible');
+                $imageSet.show('fast');
+            } else {
+                $('div.small-slideshow-editor div.image-set').hide('fast');
+            }
+        });
+
+        $('div.small-slideshow-editor .modal-background').click(function(e) {
+            $('div.small-slideshow-editor #tn_select').empty();
+            $('div.small-slideshow-editor .modal-part').hide();
+        });
+
+        $('div.small-slideshow-editor a.add-image').click(function(e) {
+            $('div.small-slideshow-editor .modal-part').show();
+            $('div.small-slideshow-editor #tn_select').load('/Admin/Pages/AddImage', function() {
+                $('div.small-slideshow-editor #tn_select a.add').click(function() {
+                    var id = $(this).data('id');
+                    var url = $(this).data('url');
+                    // <tr> has image-id data to bind it properly to Image object
+                    var newImageHtml = "<tr data-image-id='" + id + "'><td>" + id +
+                        "</td><td class='image-preview-small'><img alt='' src='" + url + "'/>" + "</td><td>" +
+                        url +
+                        "</td><td><a href='#' class='delete-image btn btn-small btn-danger pull-right'>Delete</a></td></tr>";
+                    $('div.small-slideshow-editor div.image-set table.added-images').append(newImageHtml);
+                    $('div.small-slideshow-editor tr a.delete-image').last().click(function() {
+                        $(this).parent().parent().remove();
+                        e.preventDefault();
+                        return false;
+                    });
+                });
+            });
+            e.preventDefault();
+            return false;
+        });
+        // --------------------------------------------------------------------------------------
+    });
+</script>

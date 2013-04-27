@@ -1,0 +1,10 @@
+﻿@using DotDesign.WebUI.Areas.Cms.Models
+@model MenuItem
+
+@{
+    String itemClass = Model == MenuItem.HomePage ?
+        "active" :
+        default(String);
+}
+
+<li class="@itemClass">@Html.ActionLink("Home page", "HomePage", "Pages")</li>

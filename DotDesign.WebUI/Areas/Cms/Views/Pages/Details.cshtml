@@ -1,0 +1,281 @@
+@using System.Globalization
+@using DotDesign.WebUI.Areas.Cms.Models
+@using DotDesign.WebUI.Extensions
+@using DotDesign.WebUI.Utility
+@model DotDesign.WebUI.Areas.Cms.ViewModels.PageDetailsModel
+
+@{
+    ViewBag.Title = Model.IsHomePage ? "Home Page" : "Page details";
+    
+    Layout = "~/Areas/Cms/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section HeadStyles
+{
+    @Styles.Render("~/LayoutStyles/Stylesheets/modal.css")
+}
+
+
+@(Model.IsHomePage ?
+    Html.Partial("_CmsMenu", MenuItem.HomePage) :
+    Html.Partial("_CmsMenu", MenuItem.Pages))
+
+<fieldset>
+    <legend>Details</legend>
+
+    @Html.HiddenFor(model => model.Page.Id)
+        
+    <label>
+        <strong>Url:</strong>
+        @{
+            String url = Model.Page.Url.Shorten(30);
+        }
+        @Html.DisplayFor(x => url)
+    </label>
+    <div class="spacer">
+    </div>
+    
+    <label>
+        <strong>Title:</strong>
+        @{
+            String title = Model.Page.Title.Shorten(30);
+        }
+        @Html.DisplayFor(x => title)
+    </label>
+    <div class="spacer">
+    </div>
+    
+    <label>
+        <strong>Description:</strong>
+    </label>
+    @Html.Raw("<pre>" + Html.Encode(Model.Page.Description) + "</pre>")
+    <div class="spacer">
+    </div>
+    
+    <label>
+        <strong>Category:</strong>
+        @if (!String.IsNullOrWhiteSpace(Model.CategoryName))
+        {
+            String categoryName = Model.CategoryName.Shorten(30);
+            @Html.DisplayFor(x => categoryName);
+        }
+        else
+        {
+            <i>*none*</i>
+        }
+    </label>
+    <div class="spacer">
+    </div>
+    
+    <label>
+        <strong>Is public:</strong>
+        @Html.DisplayFor(model => model.Page.IsPublic)
+    </label>
+    <div class="spacer">
+    </div>  
+    
+    <label>
+        <strong>Display in "Latest Posts" section:</strong>
+        @Html.DisplayFor(model => model.Page.IsDisplayedInLatestPosts)
+    </label>
+    <div class="spacer">
+    </div>  
+    
+    <label>
+        <strong>Large slideshow enabled:</strong>
+        @Html.DisplayFor(model => model.Page.IsLargeSlideshowEnabled)
+    </label>
+        @{
+            String opacityExtraClass = Model.Page.IsLargeSlideshowEnabled ?
+                                                        String.Empty :
+                                                        " translucent";
+        }
+        <div class="@("image-set thin-border" + opacityExtraClass)">
+            <table class="table table-hover table-striped table-bordered added-images">
+                <tr>
+                    <th>
+                        Id
+                    </th>
+                    <th>
+                        Preview
+                    </th>
+                    <th>
+                        Url
+                    </th>
+                </tr>
+
+                @foreach (var image in Model.Page.PageLargeSlideshowImages.Select(pi => pi.Image))
+                {
+                    <tr data-image-id="@image.Id">
+                        <td>
+                            @image.Id
+                        </td>
+                        <td class="image-preview-small">
+                            @Html.Image(@image.Url.ToFullRelativeResourceUrl())
+                        </td>
+                        <td>
+                            <a href="@image.Url.ToFullRelativeResourceUrl()"
+                               title="@image.Url.ToFullRelativeResourceUrl()"
+                               target="_blank">
+                                @image.Url.ToFullRelativeResourceUrl().Shorten(60)
+                            </a>
+                        </td>
+                    </tr>
+                }
+
+            </table>
+        </div>
+    
+
+
+    <label>
+        <strong>Small slideshow enabled:</strong>
+        @Html.DisplayFor(model => model.Page.IsSmallSlideshowEnabled)
+    </label>
+        @{
+            opacityExtraClass = Model.Page.IsSmallSlideshowEnabled ?
+                                                        String.Empty :
+                                                        " translucent";
+        }
+    <div class="@("image-set thin-border" + opacityExtraClass)">
+        <table class="table table-hover table-striped table-bordered added-images">
+            <tr>
+                <th>
+                    Id
+                </th>
+                <th>
+                    Preview
+                </th>
+                <th>
+                    Url
+                </th>
+            </tr>
+
+            @foreach (var image in Model.Page.PageSmallSlideshowImages.Select(pi => pi.Image))
+            {
+                <tr data-image-id="@image.Id">
+                    <td>
+                        @image.Id
+                    </td>
+                    <td class="image-preview-small">
+                        @Html.Image(@image.Url.ToFullRelativeResourceUrl())
+                    </td>
+                    <td>
+                        <a href="@image.Url.ToFullRelativeResourceUrl()"
+                           title="@image.Url.ToFullRelativeResourceUrl()"
+                           target="_blank">
+                            @image.Url.ToFullRelativeResourceUrl().Shorten(60)
+                        </a>
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+
+
+    <label>
+        <strong>Main contents:</strong>
+        @if (String.IsNullOrWhiteSpace(Model.Page.ContentsMarkup))
+        {
+            <i>*empty*</i>
+        }
+    </label>
+    @if (!String.IsNullOrWhiteSpace(Model.Page.ContentsMarkup))
+    {
+        <div class="details-contents thin-border">
+            @Html.Raw(Model.Page.ContentsMarkup)
+        </div>
+    }
+    <div class="double-spacer">
+    </div>
+    
+    <label>
+        <strong>Creation date:</strong>
+        @Html.DisplayFor(model => model.Page.CreateDate)
+    </label>
+    <div class="double-spacer">
+    </div> 
+
+</fieldset>
+
+
+@if (Model.IsHomePage)
+{
+    <div class="controls-container">
+        <div class="pull-right">
+            @using (Html.BeginForm("MakePageCommon", "Pages"))
+            {
+                @Html.AntiForgeryToken()
+                @Html.Hidden("id", Model.Page.Id.ToString(CultureInfo.InvariantCulture))
+                <button class="btn" type="submit">Turn to common page</button>
+            }
+    
+            <div class="pull-right">
+                @Html.ActionLink("Edit",
+                                 "EditHomePage",
+                                 null,
+                                 new
+                                     {
+                                         @class = "btn"
+                                     })
+
+                @Html.ActionLink("Delete",
+                                 "DeleteHomePage",
+                                 null,
+                                 new
+                                     {
+                                         @class = "delete btn btn-danger"
+                                     })
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal-background modal-part"></div>
+    <div class="modal-dialog modal-part" id="modal-delete"></div>
+
+    <script>
+        $(document).ready(setModalDelete('/Admin/Pages/DeleteHomePage',
+                                         false));
+    </script>
+
+}
+else
+{
+    <div class="controls-container">
+        <div class="pull-right">
+            @using (Html.BeginForm("MakePageHome", "Pages"))
+            {
+                @Html.AntiForgeryToken()
+                @Html.Hidden("id", Model.Page.Id.ToString(CultureInfo.InvariantCulture))
+                <button class="btn"
+                        title="Turn to home page"
+                        type="submit">
+                    Turn to home page
+                </button>
+            }
+
+            @if (Request.UrlReferrer != null &&
+                 Url.IsLocalUrl(Request.UrlReferrer.PathAndQuery))
+            {
+                <a class="btn pull-right" href="@Request.UrlReferrer.PathAndQuery">Back to list</a>
+            }
+            else
+            {
+                @Html.ActionLink("Back to list",
+                                 "AllPages",
+                                 new
+                                 {
+                                     pageNumber = PagingSettings.FirstPageNumber
+                                 },
+                                 new
+                                 {
+                                     @class = "btn pull-right"
+                                 })
+            }
+        </div>
+    </div>
+}
+
+<div class="double-spacer"></div>

@@ -1,0 +1,21 @@
+﻿@using Itransition.DotDesign.Domain.Entities
+@model Component
+
+<div class="grid_12 text-block">
+    @{
+        IEnumerator<TextPart> textEnumerator = Model.TextParts.GetEnumerator();
+        IEnumerator<Link> linkEnumerator = Model.Links.GetEnumerator();
+
+        if (textEnumerator.MoveNext())
+        {
+            <text>@textEnumerator.Current.Text</text>
+        }
+
+        while (textEnumerator.MoveNext() && linkEnumerator.MoveNext())
+        {
+            <a href="@linkEnumerator.Current.Reference">@linkEnumerator.Current.Text</a>
+            <text>@textEnumerator.Current.Text</text>
+        }
+    }
+</div>
+<div class="clear"></div>

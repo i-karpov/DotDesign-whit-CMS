@@ -1,0 +1,181 @@
+@using System.Globalization
+@using DotDesign.WebUI.Areas.Cms.Models
+@using DotDesign.WebUI.Extensions
+@using PagedList.Mvc
+@model DotDesign.WebUI.Areas.Cms.ViewModels.AllPagesModel
+
+@{
+    ViewBag.Title = "Pages";
+    Layout = "~/Areas/Cms/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section HeadStyles
+{
+    @Styles.Render("~/LayoutStyles/Stylesheets/modal.css")
+}
+
+@Html.Partial("_CmsMenu", MenuItem.Pages)
+
+<table class="table table-hover table-striped table-bordered">
+    <tr>
+        <th>
+            Id
+        </th>
+        <th>
+            Title
+        </th>
+        <th>
+            Url
+        </th>
+        <th>
+            Category
+        </th>
+        <th>
+            Is public
+        </th>
+        <th>
+            Creation date
+        </th>
+        <th>
+        </th>
+    </tr>
+
+    @foreach (var page in Model.Pages)
+    {
+        <tr>
+            <td>
+                <strong>@page.Id</strong>
+            </td>
+            <td>
+                @page.Title.Shorten(30)
+                @if (Model.HomePageId == page.Id)
+                {
+                    <span class="label label-info">Home</span>
+                }
+            </td>
+            <td>
+                @page.Url.Shorten(30)
+            </td>
+            <td>
+                @if (page.CategoryId.HasValue)
+                {
+                    @page.Category.Name.Shorten(30)
+                }
+                else
+                {
+                    <i>*none*</i>
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(x => page.IsPublic)
+            </td>
+            <td>
+                @Html.DisplayFor(x => page.CreateDate)
+            </td>
+            <td>
+                <div class="pull-right">
+                    @if (Model.HomePageId != page.Id)
+                    {
+                        using (Html.BeginForm("MakePageHome",
+                                    "Pages",
+                                    FormMethod.Post,
+                                    new
+                                        {
+                                            @class = "make-home"
+                                        }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.Hidden("id", page.Id.ToString(CultureInfo.InvariantCulture))
+                            <button class="btn btn-link"
+                                    title="Turn to home page"
+                                    type="submit">
+                                <i class="icon-home"></i>
+                            </button>
+                        }
+                    }
+                    &nbsp;
+                    @Html.ActionLink(" ", 
+                                     "Details", 
+                                     new
+                                         {
+                                             id = page.Id
+                                         },
+                                     new
+                                         {
+                                             @class = "icon-list-alt",
+                                             title = "Details"
+                                         })
+                    &nbsp;
+                    @Html.ActionLink(" ",
+                                     "Edit",
+                                     new
+                                         {
+                                             id = page.Id
+                                         },
+                                     new
+                                         {
+                                             @class = "icon-pencil",
+                                             title = "Edit"
+                                         })
+                    &nbsp;
+                    @Html.ActionLink(" ",
+                                     "Delete",
+                                     new RouteValueDictionary(new
+                                                                  {
+                                                                      id = page.Id
+                                                                  }),
+                                     new Dictionary<String, Object>
+                                         {
+                                             {
+                                                 "class",
+                                                 "delete icon-remove"
+                                             },
+                                             {
+                                                 "data-id",
+                                                 page.Id.ToString(CultureInfo.InvariantCulture)
+                                             },
+                                             {
+                                                 "title",
+                                                 "Delete"
+                                             }
+                                         })
+                </div>
+            </td>
+        </tr>
+    }
+
+</table>
+
+@Html.ActionLink("Add page",
+    "Create",
+    null,
+    new
+        {
+            @class = "btn btn-primary pull-right"
+        })
+
+@Html.PagedListPager(Model.Pages, pageNumber => Url.Action("AllPages", new
+                                                                           {
+                                                                               pageNumber
+                                                                           }),
+                     new PagedListRenderOptions
+                         {
+                             ContainerDivClasses = new[]
+                                                       {
+                                                           "pagination",
+                                                           "pagination-centered"
+                                                       },
+                             DisplayLinkToFirstPage = true,
+                             DisplayLinkToLastPage = true
+                         })
+
+<div class="modal-background modal-part"></div>
+<div class="modal-dialog modal-part" id="modal-delete"></div>
+
+
+@section BottomScripts
+{
+    <script>
+        $(document).ready(setModalDelete('/Admin/Pages/Delete'));
+    </script>
+}

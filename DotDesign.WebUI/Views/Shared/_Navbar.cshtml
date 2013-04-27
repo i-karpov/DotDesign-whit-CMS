@@ -1,0 +1,13 @@
+﻿@using DotDesign.Domain.Entities
+@using DotDesign.WebUI.Utility
+@model IEnumerable<Category>
+
+@foreach (Category category in Model)
+{
+    @Html.ActionLink(category.Name.ToUpper(), "Category",
+        new
+            {
+                categoryUrl = category.Url,
+                pageNumber = PagingSettings.FirstPageNumber
+            });
+}

@@ -1,0 +1,9 @@
+@model DotDesign.Domain.Entities.TwitterUpdate
+
+@Html.LabelFor(model => model.Text)
+@Html.TextAreaFor(model => model.Text)
+@Html.ValidationMessageFor(model => model.Text)
+
+@Html.LabelFor(model => model.IsPublic)
+@Html.CheckBoxFor(model => model.IsPublic)
+@Html.ValidationMessageFor(model => model.IsPublic)

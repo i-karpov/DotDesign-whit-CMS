@@ -1,0 +1,14 @@
+﻿@model Itransition.DotDesign.Domain.Entities.Component
+
+<div class="grid_12">
+    <div class="large-slideshow-shadow"></div>
+    <div class="nivo-slider-default-theme">
+        <div class="nivoSlider">
+            @foreach(var image in Model.Images)
+            {
+                <img src="@image.Url" alt="" />
+            }
+        </div>
+    </div>
+</div>
+<div class="clear"></div>

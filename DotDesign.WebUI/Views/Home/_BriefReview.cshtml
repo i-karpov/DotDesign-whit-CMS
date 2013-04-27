@@ -1,0 +1,20 @@
+﻿@using Itransition.DotDesign.WebUI.Extensions
+@using Itransition.DotDesign.WebUI.ViewModels
+@model BriefReview
+
+<div class="prefix_2 grid_8 suffix_2">
+    <div class="content-overview">
+        <header>
+            <p>
+                @Model.Title.Shorten(60)
+            </p>
+        </header>
+        <p>
+            @Model.Description.Shorten(800)
+        </p>
+        @Html.PageLink("More...", Model.Title, Model.CategoryName, Model.Url)
+    </div>
+</div>
+<div class="clear"></div>
+    
+

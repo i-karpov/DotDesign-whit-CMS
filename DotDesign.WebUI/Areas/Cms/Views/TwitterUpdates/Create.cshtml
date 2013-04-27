@@ -1,0 +1,28 @@
+@using DotDesign.WebUI.Areas.Cms.Models
+@model DotDesign.Domain.Entities.TwitterUpdate
+
+@{
+    ViewBag.Title = "Twitter Updates";
+    Layout = "~/Areas/Cms/Views/Shared/_AdminLayout.cshtml";
+}
+
+@Html.Partial("_CmsMenu", MenuItem.TwitterUpdates)
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    <fieldset>
+        <legend>TwitterUpdate</legend>
+
+		@Html.Partial("_CreateOrEdit", Model)
+
+        <p>
+            <button type="submit">Create</button>
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to list", "AllTwitterUpdates")
+</div>
+
+

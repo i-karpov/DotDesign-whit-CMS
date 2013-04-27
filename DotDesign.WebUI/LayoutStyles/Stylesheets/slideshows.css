@@ -1,0 +1,61 @@
+div.nivoSlider {
+	width: 940px;
+	height: 341px;
+}
+
+div.large-slideshow-shadow {
+	background: url("../Images/large-slideshow-background.png") no-repeat;
+	width: 1200px;
+	height: 150px;
+	margin-bottom: -150px;
+	position: relative;
+	left: -130px;
+	top: 235px;
+    z-index: -1;
+}
+
+div.small-slideshow {
+	width: 320px;
+	position: relative;
+	left: -8px;
+	display: none;
+}
+
+div.bx-wrapper {
+    left: -1px;
+}
+
+div.slider-image-wrapper {
+	padding: 0 9px 0 9px;
+}
+
+div.slider-image {
+	width: 298px;
+	height: 183px;
+	
+	border: solid 1px #a6a6a6;
+}
+
+div.slider-image a {
+	display: block;
+	width: 294px;
+	height: 179px;
+	margin: 2px;
+}
+
+div.slider-image img {
+	width: 294px;
+	height: 179px;
+}
+
+div.image-gallery a {
+    display: block;
+    width: 220px;
+    height: 140px;
+    margin: 10px 0 10px 0;
+}
+
+div.image-gallery img {
+    width: 220px;
+    height: 140px;
+}

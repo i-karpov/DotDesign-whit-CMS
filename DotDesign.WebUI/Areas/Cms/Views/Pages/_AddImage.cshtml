@@ -1,0 +1,54 @@
+﻿@using DotDesign.WebUI.Extensions
+@model IEnumerable<DotDesign.Domain.Entities.Image>
+
+@{
+    Layout = null;
+}
+
+<table class="table table-hover table-striped table-bordered available-images">
+        <tr>
+            <th>
+                Id
+            </th>
+            <th>
+                Preview
+            </th>
+            <th>
+                Url
+            </th>
+            <th>
+                Creation Date
+            </th>
+            <th>
+            </th>
+        </tr>
+
+        @foreach (var image in Model)
+        {
+            <tr>
+                <td>
+                    <strong>@image.Id</strong>
+                </td>
+                <td class="image-preview-small">
+                    @Html.Image(image.Url.ToFullRelativeResourceUrl())
+                </td>
+                <td>
+                    <a href="@image.Url.ToFullRelativeResourceUrl()"
+                       title="@image.Url.ToFullRelativeResourceUrl()"
+                       target="_blank">
+                        @image.Url.ToFullRelativeResourceUrl().Shorten(30)
+                    </a>
+                </td>
+                <td>
+                    @Html.DisplayFor(x => image.CreateDate)
+                </td>
+                <td>
+                    <a class="add btn btn-primary btn-small"
+                       href="#"
+                       data-id="@image.Id"
+                       data-url="@image.Url.ToFullRelativeResourceUrl()">Add</a>
+                </td>
+            </tr>
+        }
+
+    </table>

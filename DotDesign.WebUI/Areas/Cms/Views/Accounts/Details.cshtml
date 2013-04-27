@@ -1,0 +1,118 @@
+@using DotDesign.WebUI.Extensions
+@using DotDesign.WebUI.Utility
+@model DotDesign.WebUI.Areas.Cms.ViewModels.AccountModel
+
+@{
+    ViewBag.Title = "Account details";
+    Layout = "~/Areas/Cms/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section HeadStyles {
+    @Styles.Render("~/LayoutStyles/Stylesheets/account-details.css")
+    @if (Model.IsActiveAdmin)
+    {
+        @Styles.Render("~/LayoutStyles/Stylesheets/modal.css")
+    }
+}
+
+<fieldset>
+    <legend><small>Username:</small>&nbsp;&nbsp;@Model.Username.Shorten(30)
+
+        @if (!Model.ProfileModel.HasValue)
+        {
+            <span class="label">No Profile Yet</span>
+        }
+        
+        @if (Model.IsActiveAdmin)
+        {
+            <span class="pull-right">
+                <small>
+                    @Html.ActionLink("Delete account",
+                                     "Delete",
+                                     null,
+                                     new
+                                         {
+                                             @class = "delete"
+                                         })
+                    &nbsp;
+                    @Html.ActionLink("Change password", "ChangePassword")
+                </small>
+            </span>
+        }
+    </legend>
+
+    <table class="account-details table-hover">
+
+        @if (Model.ProfileModel.HasValue)
+        {
+            <tr>
+                <td class="first">First name</td>
+                @{
+                    String firstName = Model.ProfileModel.FirstName.Shorten(60);
+                }
+                <td class="second">@Html.DisplayFor(x => firstName)</td>
+            </tr>
+            <tr>
+                <td class="first">Last name</td>
+                @{
+                    String lastName = Model.ProfileModel.LastName.Shorten(60);
+                }
+                <td class="second">@Html.DisplayFor(x => lastName)</td>
+            </tr>
+            <tr>
+                <td class="first">Phone number</td>
+                <td class="second">@Html.DisplayFor(model => model.ProfileModel.PhoneNumber)</td>
+            </tr>
+            <tr>
+                <td class="first">Email</td>
+                <td class="second">@Html.DisplayFor(model => model.ProfileModel.Email)</td>
+            </tr>
+            <tr>
+                <td class="first">Description</td>
+                @{
+                    String description = Model.ProfileModel.Description.Shorten(60);
+                }
+                <td class="second">@Html.DisplayFor(x => description)</td>
+            </tr>
+        }
+    </table>
+    
+    <div class="controls-container">
+        <div class="pull-right">
+            @Html.ActionLink(HttpUtility.HtmlDecode("&larr;&nbsp;&nbsp;All accounts"),
+                             "AllAccounts",
+                             new
+                                 {
+                                     controller = "Accounts",
+                                     pageNumber = PagingSettings.FirstPageNumber
+                                 },
+                             new
+                                 {
+                                     @class = "btn"
+                                 })
+            @if (Model.IsActiveAdmin)
+            {
+                @Html.ActionLink("Edit account",
+                                 "Edit",
+                                 null,
+                                 new
+                                     {
+                                         @class = "btn"
+                                     })
+            }
+        </div>
+    </div>
+    <div class="double-spacer"></div>
+
+</fieldset>
+
+@if (Model.IsActiveAdmin)
+{
+    <div class="modal-background modal-part"></div>
+    <div class="modal-dialog modal-part" id="modal-delete"></div>
+    
+    <script>
+        $(document).ready(setModalDelete('/Admin/Accounts/Delete',
+                                         false));
+    </script>
+}

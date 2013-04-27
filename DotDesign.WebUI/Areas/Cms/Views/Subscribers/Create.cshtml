@@ -1,0 +1,57 @@
+@using DotDesign.WebUI.Areas.Cms.Models
+@using DotDesign.WebUI.Utility
+@model DotDesign.WebUI.Areas.Cms.ViewModels.SubscriberModel
+
+@{
+    ViewBag.Title = "Creating subscriber";
+    Layout = "~/Areas/Cms/Views/Shared/_AdminLayout.cshtml";
+}
+
+@Html.Partial("_CmsMenu", MenuItem.Subscribers)
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <fieldset>
+        <legend>New subscriber</legend>
+
+        <div class="control-group">
+            <label><strong>Name</strong></label>
+            @Html.EditorFor(model => model.Name)
+            @Html.ValidationMessageFor(model => model.Name)
+        </div>
+
+        <div class="control-group">
+            <label><strong>Email</strong></label>
+            @Html.EditorFor(model => model.Email)
+            @Html.ValidationMessageFor(model => model.Email)
+        </div>
+        
+        <div class="spacer"></div>
+
+        <div class="pull-right">
+            @if (Request.UrlReferrer != null &&
+                 Url.IsLocalUrl(Request.UrlReferrer.PathAndQuery))
+            {
+                <a class="btn" href="@Request.UrlReferrer.PathAndQuery">Back to list</a>
+            }
+            else
+            {
+                @Html.ActionLink("Back to list",
+                                 "AllSubscribers",
+                                 new
+                                     {
+                                         pageNumber = PagingSettings.FirstPageNumber
+                                     },
+                                 new
+                                     {
+                                         @class = "btn"
+                                     })
+            }
+            <button type="submit" class="btn btn-primary">Add</button>
+        </div>
+    </fieldset>
+}
+
+

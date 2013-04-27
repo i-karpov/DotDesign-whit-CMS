@@ -1,0 +1,40 @@
+﻿@using PagedList.Mvc
+@model DotDesign.WebUI.ViewModels.CategoryPageModel
+
+@{
+    ViewBag.title = "Category";
+    Layout = "~/Views/Shared/_ClientLayout.cshtml";
+}
+
+@section HeadStyles {
+    @Styles.Render("~/LayoutStyles/Stylesheets/main-content.css")
+}
+
+<div class="prefix_1 grid_10 suffix_1">
+    <header class="category-pages">
+        Category :<b>@Model.CategoryName</b>
+    </header>
+</div>
+<div class="clear">
+</div>
+
+@Html.Partial("_PageBriefReviewsList", Model.BriefReviews)
+
+<div class="prefix_1 grid_10 suffix_1">
+    @Html.PagedListPager(Model.BriefReviews,
+                         pageNumber => Url.Action("Category",
+                                                  new
+                                                      {
+                                                          pageNumber
+                                                      }),
+                         new PagedListRenderOptions
+                             {
+                                 DisplayLinkToFirstPage = true,
+                                 DisplayLinkToLastPage = true
+                             })
+</div>
+<div class="clear">
+</div>
+
+
+

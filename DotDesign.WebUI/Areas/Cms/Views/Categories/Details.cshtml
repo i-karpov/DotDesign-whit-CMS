@@ -1,0 +1,72 @@
+@using DotDesign.WebUI.Areas.Cms.Models
+@using DotDesign.WebUI.Extensions
+@using DotDesign.WebUI.Utility
+@model DotDesign.WebUI.Areas.Cms.ViewModels.CategoryModel
+
+@{
+    ViewBag.Title = "Category details";
+    Layout = "~/Areas/Cms/Views/Shared/_AdminLayout.cshtml";
+}
+
+@Html.Partial("_CmsMenu", MenuItem.Categories)
+
+<fieldset>
+    <legend>Details</legend>
+
+    <label>
+        <strong>Url:</strong>
+        @{
+            String url = Model.Url.Shorten(30);
+        }
+        @Html.DisplayFor(x => url)
+    </label>
+    <div class="spacer">
+    </div>
+
+    <label>
+        <strong>Name:</strong>
+        @{
+            String name = Model.Name.Shorten(30);
+        }
+        @Html.DisplayFor(x => name)
+    </label>
+    <div class="spacer">
+    </div>
+    
+    <label>
+        <strong>Is public:</strong>
+        @Html.DisplayFor(model => model.IsPublic)
+    </label>
+    <div class="spacer">
+    </div>   
+
+    <label>
+        <strong>Creation date:</strong>
+        @Html.DisplayFor(model => model.CreateDate)
+    </label>
+    <div class="spacer">
+    </div>   
+</fieldset>
+
+<div class="controls-container">
+    @if (Request.UrlReferrer != null &&
+         Url.IsLocalUrl(Request.UrlReferrer.PathAndQuery))
+    {
+        <a class="btn pull-right" href="@Request.UrlReferrer.PathAndQuery">Back to list</a>
+    }
+    else
+    {
+        @Html.ActionLink("Back to list",
+                         "AllCategories",
+                         new
+                             {
+                                 pageNumber = PagingSettings.FirstPageNumber
+                             },
+                         new
+                             {
+                                 @class = "btn pull-right"
+                             })
+    }
+</div>
+
+<div class="double-spacer"></div>

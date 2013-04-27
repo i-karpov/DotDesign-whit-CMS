@@ -1,0 +1,89 @@
+﻿@using DotDesign.WebUI.Extensions
+@model DotDesign.WebUI.ViewModels.ContentsPageModel
+
+@{
+    ViewBag.title = Model.Title;
+    ViewBag.Description = Model.Description;
+    Layout = "~/Views/Shared/_ClientLayout.cshtml";
+}
+
+@section HeadStyles {
+    @Styles.Render("~/LayoutStyles/Stylesheets/slideshows.css")
+    @Styles.Render("~/LayoutStyles/Stylesheets/main-content.css")
+    @Styles.Render("~/LayoutStyles/Stylesheets/nivo-slider.css")
+    @Styles.Render("~/LayoutStyles/Stylesheets/nivo-slider-default-theme.css")
+    @Styles.Render("~/LayoutStyles/Stylesheets/bx_styles.css")
+    @Styles.Render("~/LayoutStyles/Stylesheets/lightbox.css")
+}
+
+@if (Model.IsLargeSlideshowEnabled && Model.LargeSlideshowImages.Count > 0)
+{
+    <div class="grid_12">
+        <div class="large-slideshow-shadow"></div>
+        <div class="nivo-slider-default-theme">
+            <div class="nivoSlider">
+                @foreach (var image in Model.LargeSlideshowImages)
+                {
+                    @Html.Image(image.Url.ToFullRelativeResourceUrl())
+                }
+            </div>
+        </div>
+    </div>
+    <div class="clear"></div>
+}
+
+
+
+<div class="grid_12 contents-markup">
+    @Html.Raw(Model.ContentsMarkup)
+</div>
+<div class="clear"></div>
+
+
+
+
+@if (Model.IsSmallSlideshowEnabled && Model.SmallSlideshowImages.Count > 0)
+{
+    <div class="grid_12 double-spacer"></div>
+	<div class="clear"></div>
+    <div class="grid_12">
+        <div class="small-slideshow">
+            <div class="bx-slider">
+            @foreach (var image in Model.SmallSlideshowImages)
+            {
+                <div class="slider-image-wrapper">
+                    <div class="slider-image">
+                        <a href="@image.Url.ToFullRelativeResourceUrl()" class="lightbox">
+                            @Html.Image(image.Url.ToFullRelativeResourceUrl())
+                        </a>
+                    </div>
+                </div>
+            }
+            </div>
+        </div>
+    </div>
+    <div class="clear"></div>
+}
+
+
+
+@section BottomScripts {
+    @Scripts.Render("~/Scripts/jquery.nivo.slider.pack.js")
+    @Scripts.Render("~/Scripts/jquery.bxSlider.min.js")
+    @Scripts.Render("~/Scripts/lightbox.js")
+
+    <script>
+        $(window).ready(function () {
+            $(".nivoSlider").nivoSlider();
+            
+            $(".small-slideshow").css("display", "block");
+            $('.bx-slider').bxSlider({
+                displaySlideQty: 3,
+                moveSlideQty: 1
+            });
+        });
+    </script>
+}
+
+
+

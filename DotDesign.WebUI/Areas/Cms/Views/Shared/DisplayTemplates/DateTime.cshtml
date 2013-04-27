@@ -1,0 +1,5 @@
+﻿@using System.Globalization
+@model DateTime
+
+@Model.ToString("d MMM yyyy, HH:mm",
+    CultureInfo.InvariantCulture)

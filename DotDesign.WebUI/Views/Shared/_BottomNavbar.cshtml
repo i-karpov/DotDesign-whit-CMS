@@ -1,0 +1,26 @@
+﻿@using DotDesign.Domain.Entities
+@using DotDesign.WebUI.ViewModels
+@model BottomNavbarModel
+
+<nav>
+    @{
+        IEnumerator<Category> categories = Model.Categories.GetEnumerator();
+        if (categories.MoveNext())
+        {
+            @Html.Partial("_BottomNavbarItem", new BottomNavbarItemModel
+                                                   {
+                                                       Category = categories.Current,
+                                                       CurrentCategoryUrl = Model.CurrentCategoryUrl
+                                                   })
+        }
+        while (categories.MoveNext())
+        {
+            <text>&nbsp;/&nbsp;</text>
+            @Html.Partial("_BottomNavbarItem", new BottomNavbarItemModel
+                                                   {
+                                                       Category = categories.Current,
+                                                       CurrentCategoryUrl = Model.CurrentCategoryUrl
+                                                   })
+        }
+    }
+</nav>

@@ -1,0 +1,25 @@
+header div.logo-text {
+	padding-top: 20px;
+}
+
+header div.logo-text span {
+	font: 40px "YanoneKaffeesatz_Regular";
+}
+
+header div.logo-text span.logo-text-first-part {
+	color: #cccccc;
+	margin-right: -4px;
+}
+
+header div.logo-text span.logo-text-second-part {
+	color: #019ffa;
+}
+
+header a.logo-large {
+	background: url("../Images/large-logo.png");
+    display: block;
+	height: 61px;
+	width: 61px;
+	float: left;
+	margin-right: 6px;
+}

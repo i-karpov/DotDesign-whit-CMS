@@ -1,0 +1,106 @@
+﻿@using DotDesign.WebUI.Areas.Cms.Models
+@using DotDesign.WebUI.Utility
+@model DotDesign.WebUI.Areas.Cms.ViewModels.UploadImageModel
+
+@{
+    ViewBag.Title = "Upload image";
+    Layout = "~/Areas/Cms/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section HeadStyles
+{
+    @Styles.Render("~/LayoutStyles/Stylesheets/jasny-bootstrap.css")
+}
+
+@section BottomScripts
+{
+    @Scripts.Render("~/Scripts/jasny-bootstrap.min.js")
+    <script>
+        $(document).ready(function() {
+            $("form").submit(function(e) {
+                var $fileInput = $("form input.image-input");
+                if ($fileInput.val() === '') {
+                    alert('Please, choose image to upload.');
+                    e.preventDefault();
+                    return false;
+                }
+                var extension = $fileInput.val().split('.').pop().toLowerCase();
+                if ($.inArray(extension, ['jpeg', 'jpg', 'png', 'tif', 'gif']) == -1) {
+                    $fileInput.val('');
+                    alert('Image can be jpeg, jpg, gif, png or tif format only.');
+                    e.preventDefault();
+                    return false;
+                }
+                if ($fileInput[0].files[0].size > 524288) {
+                    $fileInput.val('');
+                    alert('File size should be less than 0.5 MB.');
+                    e.preventDefault();
+                    return false;
+                }
+                return true;
+            });
+        });
+    </script>
+}
+
+@Html.Partial("_CmsMenu", MenuItem.Images)
+
+
+@using (Html.BeginForm("Upload", "Images", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <fieldset>
+        <legend>Uploading image</legend>
+        
+        <div class="control-group">
+            <label><strong>Url</strong></label>
+            @Html.EditorFor(model => model.Url)
+            @Html.ValidationMessageFor(model => model.Url)
+        </div>
+    
+        <div class="control-group">
+            <label><strong>Image to upload</strong></label>
+            <div class="fileupload fileupload-new" data-provides="fileupload">
+                <div class="fileupload-new thumbnail">
+                    <img src="@(Config.ResourceNotFoundImageRelativePath.Substring(1))" alt="" />
+                </div>
+                <div class="fileupload-preview fileupload-exists thumbnail">
+                </div>
+                <div>
+                    <span class="btn btn-file">
+                        <span class="fileupload-new">Select image</span>
+                        <span class="fileupload-exists">Change</span>
+                        <input name="ImageData" type="file" class="image-input" />
+                    </span>
+                    <a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>
+                </div>
+            </div>  
+        </div>      
+        <div class="spacer"></div>
+        
+        <div class="pull-right">
+            @if (Request.UrlReferrer != null &&
+                Url.IsLocalUrl(Request.UrlReferrer.PathAndQuery))
+            {
+                <a class="btn"
+                    href="@Request.UrlReferrer.PathAndQuery">
+                    Back to list
+                </a>
+            }
+            else
+            {
+                @Html.ActionLink("Back to list",
+                    "AllImages",
+                    new
+                        {
+                            pageNumber = PagingSettings.FirstPageNumber
+                        },
+                    new
+                        {
+                            @class = "btn"
+                        })
+            }
+            <button type="submit" class="image-submit btn btn-primary">Upload</button>
+        </div>    
+    </fieldset>
+}

@@ -1,0 +1,202 @@
+﻿@using DotDesign.WebUI.Extensions
+@using DotDesign.WebUI.ViewModels
+@model DotDesign.WebUI.ViewModels.IPage
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width">
+
+        <title>DotDesign: @ViewBag.Title</title>
+        <meta name="description" content="@ViewBag.Description">
+        
+        @Styles.Render("~/LayoutStyles/Stylesheets/reset.css")
+        @Styles.Render("~/LayoutStyles/Stylesheets/960.css")
+        @Styles.Render("~/LayoutStyles/Stylesheets/global.css")
+        @Styles.Render("~/LayoutStyles/Stylesheets/fonts.css")
+        @Styles.Render("~/LayoutStyles/Stylesheets/navbar.css")
+        @Styles.Render("~/LayoutStyles/Stylesheets/header.css")
+        @Styles.Render("~/LayoutStyles/Stylesheets/footer.css")
+        @Styles.Render("~/LayoutStyles/Stylesheets/modal.css")
+        @RenderSection("HeadStyles", false)
+        <!--[if gte IE 9]>
+            <style type="text/css">
+                .gradient {
+                    filter: none;
+                }
+            </style>
+        <![endif]-->
+    </head>
+    <body>
+        <div class="container_12">
+                <div class="grid_12 spacer"></div>
+                <div class="clear"></div>
+
+                <div class="grid_3 suffix_9">
+                    <header>
+                        <a class="logo-large" href="/"></a>
+                        <div class="logo-text">
+                            <span class="logo-text-first-part">Dot</span>
+                            <span class="logo-text-second-part">Design</span>
+                        </div>
+                    </header>
+                </div>
+                <div class="clear"></div>
+
+                <div class="grid_12 spacer"></div>
+                <div class="clear"></div>
+
+                <div class="grid_12 navbar gradient">
+                    @Html.Partial("_Navbar", Model.CommonPart.Categories)
+                    <div class="grid_3 prefix_2 omega pull-right">
+                        @using (Html.BeginForm("Search", "Home", FormMethod.Get))
+                        {
+                            <input class="search-box" type="text" name="searchQuery" value="Search" />
+                        }
+                    </div>
+                </div>
+                <div class="clear"></div>
+
+                <div class="grid_12 double-spacer"></div>
+                <div class="clear"></div>
+            
+                <div class="content-background">
+                    @RenderBody()
+                </div>
+
+                <div class="grid_12 triple-spacer"></div>
+                <div class="clear"></div>
+
+            </div>
+
+        <div class="footer-shadow gradient"></div>
+        <footer>
+            <div class="container_12">
+                <div class="grid_12 colored-spacer"></div>
+                <div class="clear"></div>
+
+                <div class="grid_12 double-spacer"></div>
+                <div class="clear"></div>
+
+                <div class="grid_12">
+                    <div class="grid_3 alpha latest-posts">
+                        <h1>Latest Posts</h1>
+                        <div class="spacer"></div>
+                        @foreach (var latestPost in Model.CommonPart.LatestPosts)
+                        {
+                            <p>
+                                <span>+</span>
+                                @Html.PageLink(latestPost.Title.Shorten(30), latestPost.Title,
+                                        latestPost.CategoryUrl, latestPost.Url)
+                            </p>
+                        }
+                    </div>
+                    <div class="grid_3 twitter-updates">
+                        <h1>Twitter Updates</h1>
+                        @foreach (var twitterUpdate in Model.CommonPart.TwitterUpdates)
+                        {
+                            <div class="spacer"></div>
+                            @Html.Partial("_TwitterUpdateModel", twitterUpdate)
+                        }
+                    </div>
+                    <div class="grid_3 contact-info">
+                        <h1> Contact Info </h1>
+                        <div class="spacer"></div>
+                        <p>
+                            A: Street 95, United States
+                        </p>
+                        <p>
+                            T: + (0) 000-1234-5678
+                        </p>
+                        <p>
+                            F: + (0) 000-1234-5678
+                        </p>
+                        <p>
+                            E: <a href="mailto:yourmail@yoursite.com">yourmail@yoursite.com</a>
+                        </p>
+                        <p>
+                            E-2: <a href="mailto:yourmail2@yoursite.com">yourmail2@yoursite.com</a>
+                        </p>
+                    </div>
+                    <div class="grid_3 omega newsletter-signup">
+                        <h1> Newsletter Signup </h1>
+                        @using (Html.BeginForm("SubscribeToNewsletter",
+                                               "Home",
+                                               FormMethod.Post,
+                                               new
+                                                   {
+                                                       @class = "subscribtionForm"
+                                                   })) {
+                            @Html.AntiForgeryToken()
+                            <label>Name<span>*</span></label>
+                            @Html.EditorFor(page => page.CommonPart.Subscriber.Name)
+                            <label>Email<span>*</span></label>
+                            @Html.EditorFor(page => page.CommonPart.Subscriber.Email)
+                            <button type="submit" class="gradient">
+                                Sign Up Now
+                            </button>
+                        }
+                    </div>
+                </div>
+                <div class="clear"></div>
+
+                <div class="grid_12 transparent-spacer"></div>
+                <div class="clear"></div>
+
+                <div class="grid_7">
+                    @Html.Partial("_BottomNavbar", new BottomNavbarModel
+                                                       {
+                                                          Categories = Model.CommonPart.Categories,
+                                                          CurrentCategoryUrl = Model.CurrentCategoryUrl
+                                                       })
+                    <p class="copyrights">
+                        &copy; Copyright 2011. All rights reserved. Template created by: <span>Vladimir Babić</span> / <a href="http://vladimirbabic.net" target="_blank">http://vladimirbabic.net</a>
+                    </p>
+                </div>
+                <div class="grid_2 prefix_3">
+                    <div class="logo-small"></div>
+                </div>
+                <div class="clear"></div>
+				
+                <div class="grid_12 spacer"></div>
+                <div class="clear"></div>
+
+            </div>
+        </footer>
+
+        <div class="modal-background modal-part"></div>
+        <div class="modal-dialog modal-part" id="subscription-report"></div>
+
+        @Scripts.Render("http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js")
+        @Scripts.Render("~/Scripts/input-placeholder.js")
+        <script>
+            $(document).ready(function() {
+                $("input.search-box").setInputPlaceholder("Search");
+
+                $('.modal-background').click(function () {
+                    $('#subscription-report').empty();
+                    $('.modal-part').hide();
+                });
+                $('form.subscribtionForm').submit(function (e) {
+                    $('.modal-part').show();
+                    var $subscriberNameInput = $('input#CommonPart_Subscriber_Name');
+                    var $subscriberEmailInput = $('input#CommonPart_Subscriber_Email');
+                    $('#subscription-report').load('/SubscribeToNewsletter',
+                        {
+                            name: $subscriberNameInput.val(),
+                            email: $subscriberEmailInput.val(),
+                            __RequestVerificationToken: $("input[name$='__RequestVerificationToken']").val()
+                        });
+                    $subscriberNameInput.val('');
+                    $subscriberEmailInput.val('');
+                    e.preventDefault();
+                    return false;
+                });
+            });
+        </script>
+
+        @RenderSection("BottomScripts", required: false)
+    </body>
+</html>

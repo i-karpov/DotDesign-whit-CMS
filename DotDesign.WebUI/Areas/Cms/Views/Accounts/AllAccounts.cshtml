@@ -1,0 +1,109 @@
+@using DotDesign.WebUI.Extensions
+@using PagedList
+@using PagedList.Mvc
+@model IPagedList<DotDesign.WebUI.Areas.Cms.ViewModels.AccountModel>
+
+@{
+    ViewBag.Title = "All Accounts";
+    Layout = "~/Areas/Cms/Views/Shared/_AdminLayout.cshtml";
+}
+
+<br>
+<br>
+
+<table class="table table-hover table-striped table-bordered">
+    <tr>
+        <th>
+            Id
+        </th>
+        <th>
+            Username
+        </th>
+        <th>
+            Description
+        </th>
+        <th>
+            Email
+        </th>
+        <th>
+            Creation date
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var accountModel in Model) {
+        <tr>
+            <td>
+                <strong>@accountModel.Id</strong>
+            </td>
+            <td>
+                @{
+                    String username = accountModel.Username.Shorten(20);
+                }
+                @Html.DisplayFor(x => username)
+            </td>
+            <td>
+                @{
+                    String description = accountModel.ProfileModel.Description.Shorten(30);
+                }
+                @Html.DisplayFor(x => description)
+            </td>
+            <td>
+                @if (!String.IsNullOrWhiteSpace(accountModel.ProfileModel.Email))
+                {
+                    @Html.DisplayFor(x => accountModel.ProfileModel.Email)
+                }
+                else
+                {
+                    String emptyString = String.Empty;
+                    @Html.DisplayFor(x => emptyString)
+                }
+            </td>
+            <td>
+                @{
+                    DateTime adminCreateDate = WebSecurity.GetCreateDate(accountModel.Username);
+                }
+                @Html.DisplayFor(x => adminCreateDate)
+            </td>
+            <td>
+                @Html.ActionLink(" ",
+                    "Details",
+                    new
+                        {
+                            id = accountModel.Id
+                        },
+                    new
+                        {
+                            @class = "icon-list-alt pull-right",
+                            title = "Details"
+                        })
+            </td>
+        </tr>
+    }
+
+</table>
+
+@Html.ActionLink("Add account",
+                "Create",
+                null,
+                new
+                    {
+                        @class = "btn btn-primary pull-right"
+                    })
+
+@Html.PagedListPager(Model,
+                     pageNumber => Url.Action("AllAccounts",
+                                              new
+                                                  {
+                                                      pageNumber
+                                                  }),
+                     new PagedListRenderOptions
+                         {
+                             ContainerDivClasses = new[]
+                                                       {
+                                                           "pagination",
+                                                           "pagination-centered"
+                                                       },
+                             DisplayLinkToFirstPage = true,
+                             DisplayLinkToLastPage = true
+                         })

@@ -1,0 +1,19 @@
+@using DotDesign.WebUI.Extensions
+@model DotDesign.WebUI.Areas.Cms.ViewModels.CategoryModel
+
+@{
+    Layout = null;
+}
+
+<div class="modal-center">
+    <h4><span>Are you sure you want to delete category "</span>@Model.Name.Shorten(30)<span>"?</span></h4>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        if (Request.UrlReferrer != null)
+        {
+            @Html.Hidden("returnUrl", Request.UrlReferrer.PathAndQuery)
+        }
+        <button class="btn pull-right btn-danger" type="submit">Yes, delete</button>
+    }
+</div>

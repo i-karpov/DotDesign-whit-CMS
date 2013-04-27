@@ -1,0 +1,18 @@
+@model DotDesign.WebUI.Areas.Cms.ViewModels.CategoryModel
+
+@{
+    Layout = null;
+}
+
+<div class="control-group">
+    <label><strong>Name</strong></label>
+    @Html.EditorFor(model => model.Name)
+    @Html.ValidationMessageFor(model => model.Name)
+</div>
+
+<div class="control-group">
+    <label class="checkbox">
+        @Html.EditorFor(model => model.IsPublic)
+        &nbsp;<strong>Make it public</strong>
+    </label>
+</div>

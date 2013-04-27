@@ -1,0 +1,24 @@
+﻿@using Itransition.DotDesign.Domain.Entities
+@model Component
+
+<div class="grid_12">
+    <div class="small-slideshow">
+        <div class="bx-slider">
+        @{
+            IEnumerator<Image> imageEnumerator = Model.Images.GetEnumerator();
+            IEnumerator<TextPart> textEnumerator = Model.TextParts.GetEnumerator();
+
+            while (imageEnumerator.MoveNext() && textEnumerator.MoveNext())
+            {
+                <div class="slider-image-wrapper">
+                    <div class="slider-image">
+                        <a href="@imageEnumerator.Current.Url" class="lightbox" title="@textEnumerator.Current.Text">
+                        <img src="@imageEnumerator.Current.Url" alt="" /></a>
+                    </div>
+                </div>
+            }
+        }
+        </div>
+    </div>
+</div>
+<div class="clear"></div>

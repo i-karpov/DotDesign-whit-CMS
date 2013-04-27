@@ -1,0 +1,62 @@
+﻿.modal-background
+{
+    background: rgba(0, 0, 0, 0.3);
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+.modal-part
+{
+    z-index: 100;
+    display: none;
+}
+
+.modal-dialog
+{
+    width: 40%;
+    height: 15%;
+    top: 25%;
+    left: 25%;
+    overflow-y: auto;
+    position: fixed;
+    padding: 5%;
+    border-radius: 10px;
+    border: 0;
+    background: #fff;
+    box-shadow: 0 0 5px #000;
+}
+
+.modal-dialog-large
+{
+    width: 60%;
+    height: 40%;
+    top: 15%;
+    left: 15%;
+}
+
+
+.modal-dialog:empty
+{
+    background: #fff url(../Images/ajax-loading.gif) no-repeat center center;
+}
+
+.modal-dialog table {
+    height: 300px;
+    overflow: auto;
+}
+
+.modal-dialog .modal-center {
+    text-align: center;
+}
+
+.modal-dialog h4 span {
+    font-weight: normal;   
+}
+
+.modal-dialog h4 {
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
